@@ -40,26 +40,52 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public List<UserProfileRecord> getAllUserProfiles() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<UserProfile> getAllUserProfiles() {
+        return dao.findAll();
     }
 
     @Override
     public void deleteUserProfile(String email) {
-        // TODO Auto-generated method stub
-        
+        if (!StringUtils.isEmpty(email))  {
+            dao.delete(email);
+        }
     }
 
     @Override
-    public UserProfileRecord getUserProfile(String email) {
-        // TODO Auto-generated method stub
+    public UserProfile getUserProfile(String email) {
+        if (!StringUtils.isEmpty(email))  {
+            return dao.find(email);
+        }
+
         return null;
     }
 
     @Override
-    public void updateUserProfile(String email, String userName, String firstName, String lastName) {
-        // TODO Auto-generated method stub
-        
+    public void updateUserProfile(String currentEmail, String newEmail, String userName, String firstName, String lastName) {
+        // check email if null
+        if (!StringUtils.isEmpty(currentEmail))  {
+            
+            if (StringUtils.isEmpty(newEmail))  {
+                throw new RuntimeException("Email is required");
+            }
+    
+            // check username if null
+            if (StringUtils.isEmpty(userName)) {
+                throw new RuntimeException("Username is required");
+            }
+    
+            UserProfile updatedUserProfile = new UserProfileInfo();
+            updatedUserProfile.setEmail(newEmail);
+            updatedUserProfile.setUsername(userName);
+            updatedUserProfile.setFirstName(firstName);
+            updatedUserProfile.setLastName(lastName);
+    
+            try {
+                dao.update(currentEmail, updatedUserProfile);
+                
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

@@ -14,25 +14,29 @@ public interface UserProfileService {
 
     /**
      * 
-     * @param email - email of the user profile to create, and is a required field.
+     * @param currentEmail - current email.
+     * @param newEmail - new email of the user profile to create, and is a required field. If different 
+     *                  from the current email, then this will replace the current email as the new
+     *                  identifier for the user profile.
+     * 
      * @param userName - username of the user profile to create, and is a required field.
      * @param firstName - nullable 
      * @param lastName - nullable
      */
-    void updateUserProfile(String email, String userName, String firstName, String lastName);
+    void updateUserProfile(String currentEmail, String newEmail, String userName, String firstName, String lastName);
 
     /**
      * 
      * @param email - email of the user profile to query.
      * @return
      */
-    UserProfileRecord getUserProfile(String email);
+    UserProfile getUserProfile(String email);
 
     /**
      * 
      * @return
      */
-    List<UserProfileRecord> getAllUserProfiles();
+    List<UserProfile> getAllUserProfiles();
 
     /**
      * 
