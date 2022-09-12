@@ -15,11 +15,6 @@ public class UserProfileServiceImplTest {
 
     UserProfileServiceImpl serviceImpl;
     UserProfileDAO dao;
-    
-    // @BeforeAll
-    // public void setup() {
-    //     // Put all the initialization here before the start of this test suite.
-    // }
 
     @BeforeEach
     public void init() {
@@ -165,20 +160,68 @@ public class UserProfileServiceImplTest {
     }
 
     @Test
-    public void expectErrorWhenEmailIsEmpty() {
+    @DisplayName("Should throw an error when trying to create user profile without an email.")
+    public void expectErrorWhenEmailIsEmptyOnCreateProfile() {
+        String messageWhenFailed = "Expected createUserProfile() to throw, but it didn't";
+        String username = "username";
+        String firstName = "firstname";
+        String lastName = "lastname";
+        String expectedExceptionMessage = "Email is required";
+
+        // When email is null
         RuntimeException thrown = assertThrows(
             RuntimeException.class, 
             () -> { 
-                serviceImpl.createUserProfile(
-                null, 
-                "username", 
-                "firstname", 
-                "lastname"); 
+                serviceImpl.createUserProfile(null, username, firstName, lastName); 
             },
-            "Expected createUserProfile() to throw, but it didn't");
+            messageWhenFailed);
 
-        assertTrue(thrown.getMessage().contains("Email is required"));
+        // Then
+        assertTrue(thrown.getMessage().contains(expectedExceptionMessage));
+
+        // When email is empty string
+        RuntimeException thrownAgain = assertThrows(
+            RuntimeException.class, 
+            () -> { 
+                serviceImpl.createUserProfile("", username, firstName, lastName); 
+            },
+            messageWhenFailed);
+
+        // Then
+        assertTrue(thrownAgain.getMessage().contains(expectedExceptionMessage));
+
     };
 
-    
+    @Test
+    @DisplayName("Should throw an error when trying to create user profile without a username.")
+    public void expectErrorWhenUsernameIsEmptyOnCreateProfile() {
+        String messageWhenFailed = "Expected createUserProfile() to throw, but it didn't";
+        String firstName = "firstname";
+        String lastName = "lastname";
+        String email = "myemail@outlook.com";
+        String expectedExceptionMessage = "Username is required";
+
+        // When username is null
+        RuntimeException thrown = assertThrows(
+            RuntimeException.class, 
+            () -> { 
+                
+                serviceImpl.createUserProfile(email, null, firstName, lastName); 
+            },
+            messageWhenFailed);
+
+        // Then
+        assertTrue(thrown.getMessage().contains(expectedExceptionMessage));
+
+        // When username is empty string
+        RuntimeException thrownAgain = assertThrows(
+            RuntimeException.class, 
+            () -> { 
+                serviceImpl.createUserProfile(email, "", firstName, lastName); 
+            },
+            messageWhenFailed);
+
+        // Then
+        assertTrue(thrownAgain.getMessage().contains(expectedExceptionMessage));
+    };
 }
