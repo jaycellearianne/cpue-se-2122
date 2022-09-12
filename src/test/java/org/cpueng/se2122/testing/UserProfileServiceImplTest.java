@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,17 +21,15 @@ public class UserProfileServiceImplTest {
     //     // Put all the initialization here before the start of this test suite.
     // }
 
-    // @BeforeEach
-    // public void init() {
-    //     // Put all the initialization here before the start of each test.
-    // }
+    @BeforeEach
+    public void init() {
+        dao = new UserProfileDAOMockImpl();
+        serviceImpl = new UserProfileServiceImpl(dao);
+    }
 
     @Test
     @DisplayName("Should be able to create user profile successfully")
     public void testCreateUserProfile() {
-        dao = new UserProfileDAOMockImpl();
-        serviceImpl = new UserProfileServiceImpl(dao);
-
         // Given
         String email = "fakeemail@gmail.com";
         String firstName = "John";
@@ -50,9 +47,6 @@ public class UserProfileServiceImplTest {
     @Test
     @DisplayName("Should be able to delete user profile successfully")
     public void testDeleteUserProfile() {
-        dao = new UserProfileDAOMockImpl();
-        serviceImpl = new UserProfileServiceImpl(dao);
-
         // Given
         String email = "fakeemail@gmail.com";
         String firstName = "John";
@@ -72,9 +66,6 @@ public class UserProfileServiceImplTest {
     @Test
     @DisplayName("Should be able to update user profile successfully")
     public void testUpdateUserProfile() {
-        dao = new UserProfileDAOMockImpl();
-        serviceImpl = new UserProfileServiceImpl(dao);
-
         // Given
         String email = "fakeemail@gmail.com";
         String firstName = "John";
@@ -100,9 +91,6 @@ public class UserProfileServiceImplTest {
     @Test
     @DisplayName("Should be able to find user profile successfully")
     public void testFindUserProfile() {
-        dao = new UserProfileDAOMockImpl();
-        serviceImpl = new UserProfileServiceImpl(dao);
-
         // Given
         String email = "fakeemail@gmail.com";
         String firstName = "John";
@@ -136,9 +124,6 @@ public class UserProfileServiceImplTest {
     @Test
     @DisplayName("Should be able to find all user profiles successfully")
     public void testFindAllUserProfiles() {
-        dao = new UserProfileDAOMockImpl();
-        serviceImpl = new UserProfileServiceImpl(dao);
-
         // Given
         String email1 = "fakeemail@gmail.com";
         String firstName1 = "John";
@@ -179,14 +164,21 @@ public class UserProfileServiceImplTest {
 
     }
 
-    // public void expectErrorWhenEmailIsEmpty() {
-    //     RuntimeException thrown = assertThrows(
-    //         RuntimeException.class,
-    //        () -> myObject.doThing(),
-    //        "Expected doThing() to throw, but it didn't");
+    @Test
+    public void expectErrorWhenEmailIsEmpty() {
+        RuntimeException thrown = assertThrows(
+            RuntimeException.class, 
+            () -> { 
+                serviceImpl.createUserProfile(
+                null, 
+                "username", 
+                "firstname", 
+                "lastname"); 
+            },
+            "Expected createUserProfile() to throw, but it didn't");
 
-    //     assertTrue(thrown.getMessage().contains("Stuff"));
-    // };
+        assertTrue(thrown.getMessage().contains("Email is required"));
+    };
 
     
 }

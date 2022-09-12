@@ -62,9 +62,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public void updateUserProfile(String currentEmail, String newEmail, String userName, String firstName, String lastName) {
-        // check email if null
+        // check current email if null
         if (!StringUtils.isEmpty(currentEmail))  {
             
+            // check new email if null
             if (StringUtils.isEmpty(newEmail))  {
                 throw new RuntimeException("Email is required");
             }
